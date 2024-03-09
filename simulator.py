@@ -46,7 +46,7 @@ while running:
     # print(player_pos.x, player_pos.y)
     change_area = [[int(player_pos.x - player_radius - 5), int(player_pos.y - player_radius - 5)],
                    [int(player_pos.x + player_radius + 5), int(player_pos.y + player_radius + 5)]]
-
+    
     for x in range(change_area[0][0], change_area[1][0] + 1):
         for y in range(change_area[0][1], change_area[1][1] + 1):
             pixel_color = screen.get_at((x, y))
