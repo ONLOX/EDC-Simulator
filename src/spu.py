@@ -43,7 +43,7 @@ class Serialwindow(QWidget):
 
         self.btn_read_data=QPushButton('读取数据',self)
         self.btn_read_data.setGeometry(20,220,170,40)
-        self.btn_read_data.clicked.connect(self.read_data_size)
+        self.btn_read_data.clicked.connect(self.read_data_line)
 
         self.port_set=QComboBox(self)
         self.port_set.setGeometry(140,270,120,40)
@@ -53,7 +53,7 @@ class Serialwindow(QWidget):
 
         self.baud_set=QComboBox(self)
         self.baud_set.setGeometry(140,320,120,40)
-        self.baud_set.addItems(['9600','19200','38400','115200'])
+        self.baud_set.addItems(['115200','38400','19200','9600'])
         self.lbl_baud_set=QLabel(self)
         self.lbl_baud_set.setGeometry(20,320,120,40)
         self.lbl_baud_set.setText('波特率:')
@@ -88,6 +88,7 @@ class Serialwindow(QWidget):
 
         self.le_recdata=QTextEdit(self)
         self.le_recdata.setGeometry(300,20,600,540)
+        self.le_recdata.setReadOnly(True)
 
         self.setGeometry(100,100,920,600)
         self.setWindowTitle('串口调试助手')
@@ -120,31 +121,43 @@ class Serialwindow(QWidget):
             self.ser = serial.Serial(port=self.port, baudrate=self.bps, bytesize=8, parity='N', stopbits=1)
             print(self.ser)
             if self.ser.is_open:
-                self.le_recdata.append('串口正常')
+                self.le_recdata.append(self.port_set.currentText() + ' opened')
         except Exception as e:
-            self.le_recdata.append('[SPU Error]: Port Not Found')
-            print('异常：', e)
+            print(type(e))
+            if 'PermissionError' in str(e):
+                self.le_recdata.append('[SPU Error]: '+ 'Port has been occupied')
+            else:
+                self.le_recdata.append('[SPU Error]: Port Not Found')
+            print('err:', e)
 
 
     def open_serial(self):
         try:
             self.ser.open()
+            self.le_recdata.append(self.port_set.currentText() + ' opened')
         except Exception as e:
-            self.le_recdata.append('[SPU Error]: Port Not Found')
-            print('异常：', e)
+            if type(e) is AttributeError:
+                self.le_recdata.append('[SPU Error]: Port Not Found')
+            else:
+                self.le_recdata.append('[SPU Error]: ' + str(e))
+            print('err:', e)
 
 
     def close_serial(self):
         try:
             self.ser.close()
+            self.le_recdata.append(self.port_set.currentText() + ' closed')
         except Exception as e:
-            self.le_recdata.append('[SPU Error]: Port Not Found')
-            print('异常：', e)
+            if type(e) is AttributeError:
+                self.le_recdata.append('[SPU Error]: Port Not Found')
+            else:
+                self.le_recdata.append('[SPU Error]: ' + str(e))
+            print('err:', e)
 
 
     def read_data_size(self):
-        ct=datetime.datetime.now()
-        ct_str=ct.strftime("%Y-%m-%d %H:%M:%S")
+        ct = datetime.datetime.now()
+        ct_str = ct.strftime("%Y-%m-%d %H:%M:%S")
         try:
             #self.size=10
             self.read_data=self.ser.read_all()
@@ -153,15 +166,25 @@ class Serialwindow(QWidget):
             #re.findall(r'.{3}',self.read_data_str)
             self.read_data_str_fg=self.str_separate(self.read_data_str)
             #print(self.read_data_str)
-            self.le_recdata.append('\n'+'['+ct_str+']'+' '+self.read_data_str_fg+'\n')
+            self.le_recdata.append('['+ct_str+']'+' '+self.read_data_str_fg)
         except Exception as e:
             self.le_recdata.append('[SPU Error]: Port Not Found')
         # return self.read_data
 
 
     def read_data_line(self):
-        self.read_data=self.ser.readline()
-        return self.read_data
+        ct = datetime.datetime.now()
+        ct_str = ct.strftime("%H:%M:%S")
+        try:
+            self.read_data=self.ser.readline()
+            self.le_recdata.append('['+ct_str+']'+' '+str(self.read_data))
+            # return self.read_data
+        except Exception as e:
+            if type(e) is AttributeError:
+                self.le_recdata.append('[SPU Error]: Port Not Found')
+            elif type(e) is serial.serialutil.PortNotOpenError:
+                self.le_recdata.append('[SPU Error]: Port Not Opened')
+            print('err:', e)
 
 
     def read_data_alway(self, way):

@@ -1,7 +1,11 @@
-pos_str = ''
+class Pos:
+    def __init__(self):
+        self.pos_str = ''
 
-def set(value):
-    pos_str = value
+    def set(self, value):
+        self.pos_str = value
 
-def get():
-    return pos_str
+    def get(self):
+        return self.pos_str
+    
+pos = Pos()
