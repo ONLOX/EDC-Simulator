@@ -1,16 +1,15 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import datetime
 import re
 import serial
 import serial.tools.list_ports
-import sys
-import time
-import datetime
 
-
+import global_var
 
 class Serialwindow(QWidget):
+
     def __init__(self) -> None:
         super().__init__()
         self.initUI()
@@ -87,10 +86,6 @@ class Serialwindow(QWidget):
         self.lbl_timeout_set.setGeometry(20,520,120,40)
         self.lbl_timeout_set.setText('超时设置:')
 
-        # self.lbl_timeout_set_2=QLabel(self)
-        # self.lbl_timeout_set_2.setGeometry(610,170,60,20)
-        # self.lbl_timeout_set_2.setText('ms')
-
         self.le_recdata=QTextEdit(self)
         self.le_recdata.setGeometry(300,20,600,540)
 
@@ -117,7 +112,7 @@ class Serialwindow(QWidget):
                 self.port_set.addItem(i.name)
 
 
-    def serial_init(self):   #初始化
+    def serial_init(self):
         self.port = self.port_set.currentText()
         self.bps = int(self.baud_set.currentText())
         self.timeout = float(self.timeout_set.text())
@@ -131,7 +126,7 @@ class Serialwindow(QWidget):
             print('异常：', e)
 
 
-    def open_serial(self):   #打开串口
+    def open_serial(self):
         try:
             self.ser.open()
         except Exception as e:
@@ -139,7 +134,7 @@ class Serialwindow(QWidget):
             print('异常：', e)
 
 
-    def close_serial(self):  #关闭串口
+    def close_serial(self):
         try:
             self.ser.close()
         except Exception as e:
@@ -186,6 +181,7 @@ class Serialwindow(QWidget):
                 self.le_recdata.append('[SPU Error]: Port Not Found')
                 print('异常：', e)
 
+
     def str_separate(self, A):
         '''
         对字符串进行按长度分割，并在中间加入其他字符，如空格、短横等
@@ -194,8 +190,3 @@ class Serialwindow(QWidget):
         c = ' '.join(b)
         #print(c)
         return c
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = Serialwindow()
-    sys.exit(app.exec_())
