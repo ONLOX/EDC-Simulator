@@ -6,9 +6,9 @@ A simulator for EDC25
 
 ## Some Package Requirements
 
-- numpy
 - pygame
 - pyvirtualcam
+- pyQt5
 
 Thanks for their preceding work!
 
@@ -21,4 +21,4 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Run simulator.py
+Run main.cpp
