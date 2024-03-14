@@ -21,4 +21,4 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Run main.cpp
+Run main.py
