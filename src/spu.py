@@ -30,10 +30,6 @@ class Serialwindow(QWidget):
         self.btn_plist=QPushButton('获取可用串口',self)
         self.btn_plist.setGeometry(20,20,170,40)
         self.btn_plist.clicked.connect(self.get_serial_info)
-        
-        # self.btn_ser_init=QPushButton('初始化',self)
-        # self.btn_ser_init.setGeometry(20,70,170,40)
-        # self.btn_ser_init.clicked.connect(self.serial_init)
 
         self.btn_open=QPushButton('打开串口',self)
         self.btn_open.setGeometry(20,120,170,40)
@@ -46,10 +42,6 @@ class Serialwindow(QWidget):
         self.btn_clear=QPushButton('清空接收区',self)
         self.btn_clear.setGeometry(20,220,170,40)
         self.btn_clear.clicked.connect(self.clear_recdata)
-
-        # self.btn_read_data=QPushButton('读取数据',self)
-        # self.btn_read_data.setGeometry(20,220,170,40)
-        # self.btn_read_data.clicked.connect(self.read_data_line)
 
         self.port_set=QComboBox(self)
         self.port_set.setGeometry(140,270,120,40)
@@ -140,7 +132,7 @@ class Serialwindow(QWidget):
             
             self.timer = QTimer()
             self.timer.timeout.connect(self.read_data_line)
-            self.timer.start(10)
+            self.timer.start(100)
 
         except Exception as e:
             print(type(e))
@@ -152,10 +144,12 @@ class Serialwindow(QWidget):
 
 
     def close_serial(self):
+
         try:
             self.timer.stop()
             self.ser.close()
             self.le_recdata.append(self.port_set.currentText() + ' closed')
+
         except Exception as e:
             print(type(e))
             if type(e) is AttributeError:
@@ -166,8 +160,10 @@ class Serialwindow(QWidget):
 
 
     def read_data_size(self):
+
         ct = datetime.datetime.now()
         ct_str = ct.strftime("%Y-%m-%d %H:%M:%S")
+
         try:
             # self.size=10
             self.read_data=self.ser.read_all()
@@ -177,6 +173,7 @@ class Serialwindow(QWidget):
             self.read_data_str_fg=self.str_separate(self.read_data_str)
             # print(self.read_data_str)
             self.le_recdata.append('['+ct_str+'] ' + self.read_data_str_fg)
+
         except Exception as e:
             print(type(e))
         # return self.read_data
