@@ -1,6 +1,7 @@
 import sys
 import threading
 
+# import msg
 import sim
 import spu
 
@@ -15,3 +16,4 @@ if __name__ == '__main__':
     sim_t.start()
     
     sys.exit(app.exec_())
+    

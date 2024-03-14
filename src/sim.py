@@ -1,8 +1,11 @@
 import numpy
 import pygame
 import pyvirtualcam
+import threading
 
-import global_var
+import msg
+
+lock = threading.Lock()
 
 def Sim():
 
@@ -37,19 +40,19 @@ def Sim():
         screen.fill("black")
         pygame.draw.circle(screen, "red", player_pos, player_radius)
 
-        keys = pygame.key.get_pressed()
-        if (keys[pygame.K_UP] or keys[pygame.K_w]) and player_pos.y - player_radius > 10:
-            # print("UP")
-            player_pos.y -= 1
-        if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and player_pos.y + player_radius < height - 10:
-            # print("DOWN")
-            player_pos.y += 1
-        if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x + player_radius < width - 10:
-            # print("LEFT")
-            player_pos.x += 1
-        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x - player_radius > 10:
-            # print("RIGHT")
-            player_pos.x -= 1
+        # keys = pygame.key.get_pressed()
+        # if (keys[pygame.K_UP] or keys[pygame.K_w]) and player_pos.y - player_radius > 10:
+        #     # print("UP")
+        #     player_pos.y -= 1
+        # if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and player_pos.y + player_radius < height - 10:
+        #     # print("DOWN")
+        #     player_pos.y += 1
+        # if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x + player_radius < width - 10:
+        #     # print("LEFT")
+        #     player_pos.x += 1
+        # if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x - player_radius > 10:
+        #     # print("RIGHT")
+        #     player_pos.x -= 1
 
         # cnt += 1
         # cnt = cnt % 1000000
@@ -62,9 +65,31 @@ def Sim():
         # if int((cnt % 400) / 100) == 3:
         #     player_pos.x -= 1
 
+        lock.acquire()
+        now_str = msg.now_pos_str
+        goal_str = msg.goal_pos_str
+        lock.release()
+
+        goal = msg.str_to_pos(goal_str)
+        now = msg.str_to_pos(now_str)
+        print(goal, now)
+
+        if (goal[0] < now[0]) and player_pos.y - player_radius > 10:
+            # print("UP")
+            player_pos.y -= 1
+        if (goal[0] > now[0]) and player_pos.y + player_radius < height - 10:
+            # print("DOWN")
+            player_pos.y += 1
+        if (goal[1] < now[1]) and player_pos.x + player_radius < width - 10:
+            # print("LEFT")
+            player_pos.x += 1
+        if (goal[1] > now[1]) and player_pos.x - player_radius > 10:
+            # print("RIGHT")
+            player_pos.x -= 1
         # print(player_pos.x, player_pos.y)
+
         change_area = [[int(player_pos.x - player_radius - 5), int(player_pos.y - player_radius - 5)],
-                    [int(player_pos.x + player_radius + 5), int(player_pos.y + player_radius + 5)]]
+                       [int(player_pos.x + player_radius + 5), int(player_pos.y + player_radius + 5)]]
         
         for x in range(change_area[0][0], change_area[1][0] + 1):
             for y in range(change_area[0][1], change_area[1][1] + 1):
