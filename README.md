@@ -1,5 +1,7 @@
 # EDC-Simulator
 
+![license_pic](https://img.shields.io/badge/license-MIT-blue)
+
 A simulator for EDC25
 
 ## Some Package Requirements
