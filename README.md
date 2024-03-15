@@ -4,7 +4,10 @@
 
 A simulator for EDC25
 
-![logo](image/logo.jpg)
+<div align="center">
+	<img src="image/logo.jpg" alt="Editor" width="300">
+</div>
+
 
 ## Some Package Requirements
 
