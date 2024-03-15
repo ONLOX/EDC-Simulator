@@ -4,6 +4,8 @@
 
 A simulator for EDC25
 
+![logo](image/logo.jpg)
+
 ## Some Package Requirements
 
 - pygame
