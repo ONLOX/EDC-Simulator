@@ -5,8 +5,8 @@ now_pos_str = ''
 
 
 def str_to_pos(str):
-    if str == '':
-        return [0.0, 0.0]
-    else:
+    try:
         return [float(str[str.find('(')+1:str.find(',')]),
                 float(str[str.find(',')+1:str.find(')')])]
+    except:
+        return [0.0, 0.0]

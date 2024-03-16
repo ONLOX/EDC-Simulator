@@ -130,7 +130,7 @@ class Serialwindow(QWidget):
             
             self.timer = QTimer()
             self.timer.timeout.connect(self.read_data_line)
-            self.timer.start(100)
+            self.timer.start(20)
 
         except Exception as e:
             print(type(e))
