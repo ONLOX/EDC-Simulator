@@ -39,10 +39,10 @@ while running:
     if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and player_pos.y + player_radius < height - 10:
         # print("DOWN")
         player_pos.y += 1
-    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x + player_radius < width - 10:
+    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x - player_radius > 10:
         # print("LEFT")
         player_pos.x -= 1
-    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x - player_radius > 10:
+    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x + player_radius < width - 10:
         # print("RIGHT")
         player_pos.x += 1
     # print(player_pos.x, player_pos.y)

@@ -21,7 +21,7 @@ def Sim():
 
     clock = pygame.time.Clock()
 
-    frame_per_second = 120
+    frame_per_second = 30
     camera = pyvirtualcam.Camera(width=width, height=height, fps=frame_per_second)
     frame = numpy.zeros((height, width, 3), numpy.uint8)
 
@@ -48,19 +48,19 @@ def Sim():
         goal = msg.str_to_pos(goal_str)
         now = msg.str_to_pos(now_str)
         # print(goal, now)
-
-        if (goal[0] < now[0]) and player_pos.y - player_radius > 10:
-            # print("UP")
-            player_pos.y -= 1
-        if (goal[0] > now[0]) and player_pos.y + player_radius < height - 10:
-            # print("DOWN")
-            player_pos.y += 1
-        if (goal[1] < now[1]) and player_pos.x + player_radius < width - 10:
+        
+        if (goal[0] < now[0]) and goal[0] - now[0] < -0.5 and player_pos.x - player_radius > 10:
             # print("LEFT")
             player_pos.x -= 1
-        if (goal[1] > now[1]) and player_pos.x - player_radius > 10:
+        if (goal[0] > now[0]) and goal[0] - now[0] > 0.5 and player_pos.x + player_radius < width - 10:
             # print("RIGHT")
             player_pos.x += 1
+        if (goal[1] < now[1]) and goal[1] - now[1] < -0.5 and player_pos.y + player_radius > height - 10:
+            # print("UP")
+            player_pos.y += 1
+        if (goal[1] > now[1]) and goal[1] - now[1] > 0.5 and player_pos.y - player_radius > 10:
+            # print("DOWN")
+            player_pos.y -= 1
         # print(player_pos.x, player_pos.y)
 
         change_area = [[int(player_pos.x - player_radius - 5), int(player_pos.y - player_radius - 5)],

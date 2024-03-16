@@ -148,6 +148,10 @@ class Serialwindow(QWidget):
             self.ser.close()
             self.le_recdata.append(self.port_set.currentText() + ' closed')
 
+            lock.acquire()
+            msg.goal_pos_str = msg.now_pos_str
+            lock.release()
+
         except Exception as e:
             print(type(e))
             if type(e) is AttributeError:
