@@ -28,12 +28,18 @@ pip install -r requirements.txt
 
 ### Automatic Version
 
-Run src/automatic/main.py
+Run `src/automatic/main.py`
 
 Control the movement by serial port data
+- `goal pos:(float,float)`
+- `now pos:(float,float)`
 
 ### Manual Version
 
-Run src/manual/main.py
+Run `src/manual/main.py`
 
-Control the movement by keys(WASD)
+Control the movement by keys
+- `W` or `↑`
+- `A` or `←`
+- `S` or `↓`
+- `D` or `→`
