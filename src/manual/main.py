@@ -41,10 +41,10 @@ while running:
         player_pos.y += 1
     if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x + player_radius < width - 10:
         # print("LEFT")
-        player_pos.x += 1
+        player_pos.x -= 1
     if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x - player_radius > 10:
         # print("RIGHT")
-        player_pos.x -= 1
+        player_pos.x += 1
     # print(player_pos.x, player_pos.y)
 
     change_area = [[int(player_pos.x - player_radius - 5), int(player_pos.y - player_radius - 5)],

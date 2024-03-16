@@ -57,10 +57,10 @@ def Sim():
             player_pos.y += 1
         if (goal[1] < now[1]) and player_pos.x + player_radius < width - 10:
             # print("LEFT")
-            player_pos.x += 1
+            player_pos.x -= 1
         if (goal[1] > now[1]) and player_pos.x - player_radius > 10:
             # print("RIGHT")
-            player_pos.x -= 1
+            player_pos.x += 1
         # print(player_pos.x, player_pos.y)
 
         change_area = [[int(player_pos.x - player_radius - 5), int(player_pos.y - player_radius - 5)],

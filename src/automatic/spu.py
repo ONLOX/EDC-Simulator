@@ -23,8 +23,6 @@ class Serialwindow(QWidget):
         self.bps = 0
         self.timeout = 0.0
 
-        self.senddata=bytes()
-
         self.read_data=''
         
         self.btn_plist=QPushButton('获取可用串口',self)
