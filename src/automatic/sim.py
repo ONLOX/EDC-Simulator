@@ -72,7 +72,7 @@ def Sim():
 
         goal = msg.str_to_pos(goal_str)
         now = msg.str_to_pos(now_str)
-        print(goal, now)
+        # print(goal, now)
 
         if (goal[0] < now[0]) and player_pos.y - player_radius > 10:
             # print("UP")
