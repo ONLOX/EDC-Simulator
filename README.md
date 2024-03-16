@@ -26,4 +26,14 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Run main.py
+### Automatic Version
+
+Run src/automatic/main.py
+
+Control the movement by serial port data
+
+### Manual Version
+
+Run src/manual/main.py
+
+Control the movement by keys(WASD)
