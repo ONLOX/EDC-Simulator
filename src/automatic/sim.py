@@ -40,31 +40,6 @@ def Sim():
         screen.fill("black")
         pygame.draw.circle(screen, "red", player_pos, player_radius)
 
-        # keys = pygame.key.get_pressed()
-        # if (keys[pygame.K_UP] or keys[pygame.K_w]) and player_pos.y - player_radius > 10:
-        #     # print("UP")
-        #     player_pos.y -= 1
-        # if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and player_pos.y + player_radius < height - 10:
-        #     # print("DOWN")
-        #     player_pos.y += 1
-        # if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and player_pos.x + player_radius < width - 10:
-        #     # print("LEFT")
-        #     player_pos.x += 1
-        # if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and player_pos.x - player_radius > 10:
-        #     # print("RIGHT")
-        #     player_pos.x -= 1
-
-        # cnt += 1
-        # cnt = cnt % 1000000
-        # if int((cnt % 400) / 100) == 0:
-        #     player_pos.y -= 1
-        # if int((cnt % 400) / 100) == 1:
-        #     player_pos.x += 1
-        # if int((cnt % 400) / 100) == 2:
-        #     player_pos.y += 1
-        # if int((cnt % 400) / 100) == 3:
-        #     player_pos.x -= 1
-
         lock.acquire()
         now_str = msg.now_pos_str
         goal_str = msg.goal_pos_str
