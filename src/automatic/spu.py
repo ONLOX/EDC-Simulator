@@ -37,21 +37,17 @@ class Serialwindow(QWidget):
         self.btn_close.setGeometry(20,170,170,40)
         self.btn_close.clicked.connect(self.close_serial)
 
-        self.btn_clear=QPushButton('清空接收区',self)
-        self.btn_clear.setGeometry(20,220,170,40)
-        self.btn_clear.clicked.connect(self.clear_recdata)
-
         self.port_set=QComboBox(self)
-        self.port_set.setGeometry(140,270,120,40)
+        self.port_set.setGeometry(140,320,120,40)
         self.lbl_port_set=QLabel(self)
-        self.lbl_port_set.setGeometry(20,270,120,40)
+        self.lbl_port_set.setGeometry(20,320,120,40)
         self.lbl_port_set.setText('串口号:')
 
         self.baud_set=QComboBox(self)
-        self.baud_set.setGeometry(140,320,120,40)
+        self.baud_set.setGeometry(140,370,120,40)
         self.baud_set.addItems(['115200','38400','19200','9600'])
         self.lbl_baud_set=QLabel(self)
-        self.lbl_baud_set.setGeometry(20,320,120,40)
+        self.lbl_baud_set.setGeometry(20,370,120,40)
         self.lbl_baud_set.setText('波特率:')
 
         # self.stopbit_set=QComboBox(self)
@@ -82,11 +78,31 @@ class Serialwindow(QWidget):
         # self.lbl_timeout_set.setGeometry(20,520,120,40)
         # self.lbl_timeout_set.setText('超时设置:')
 
-        self.le_recdata=QTextEdit(self)
-        self.le_recdata.setGeometry(300,20,600,540)
-        self.le_recdata.setReadOnly(True)
+        self.btn_clear=QPushButton('清空接收区1',self)
+        self.btn_clear.setGeometry(20,520,250,40)
+        self.btn_clear.clicked.connect(self.clear_otherData)
 
-        self.setGeometry(100,100,920,600)
+        self.btn_clear=QPushButton('清空接收区2',self)
+        self.btn_clear.setGeometry(20,570,250,40)
+        self.btn_clear.clicked.connect(self.clear_posData)
+
+        self.btn_clear=QPushButton('清空接收区3',self)
+        self.btn_clear.setGeometry(20,620,250,40)
+        self.btn_clear.clicked.connect(self.clear_alertData)
+
+        self.le_otherData=QTextEdit(self)
+        self.le_otherData.setGeometry(300,20,600,280)
+        self.le_otherData.setReadOnly(True)
+
+        self.le_posData=QTextEdit(self)
+        self.le_posData.setGeometry(300,320,600,500)
+        self.le_posData.setReadOnly(True)
+
+        self.le_alertData=QTextEdit(self)
+        self.le_alertData.setGeometry(20,840,880,50)
+        self.le_alertData.setReadOnly(True)
+
+        self.setGeometry(100,100,920,920)
         self.setWindowTitle('串口调试助手')
         self.show()
 
@@ -103,7 +119,7 @@ class Serialwindow(QWidget):
     def get_serial_info(self):
         self.plist = list(serial.tools.list_ports.comports())
         if len(self.plist) <= 0:
-            self.le_recdata.append('[SPU Error]: Port Not Found')
+            self.le_alertData.append('[SPU Error]: Port Not Found')
         else:
             self.port_set.clear()
             for i in list(self.plist):
@@ -126,7 +142,7 @@ class Serialwindow(QWidget):
             print(self.ser)
 
             if self.ser.is_open:
-                self.le_recdata.append(self.port_set.currentText() + ' opened')
+                self.le_alertData.append(self.port_set.currentText() + ' opened')
             
             self.timer = QTimer()
             self.timer.timeout.connect(self.read_data_line)
@@ -135,9 +151,9 @@ class Serialwindow(QWidget):
         except Exception as e:
             print(type(e))
             if 'PermissionError' in str(e):
-                self.le_recdata.append('[SPU Error]: Port has been occupied')
+                self.le_alertData.append('[SPU Error]: Port has been occupied')
             else:
-                self.le_recdata.append('[SPU Error]: Port Not Found')
+                self.le_alertData.append('[SPU Error]: Port Not Found')
             print('err:', e)
 
 
@@ -146,7 +162,7 @@ class Serialwindow(QWidget):
         try:
             self.timer.stop()
             self.ser.close()
-            self.le_recdata.append(self.port_set.currentText() + ' closed')
+            self.le_alertData.append(self.port_set.currentText() + ' closed')
 
             lock.acquire()
             msg.goal_pos_str = msg.now_pos_str
@@ -155,30 +171,30 @@ class Serialwindow(QWidget):
         except Exception as e:
             print(type(e))
             if type(e) is AttributeError:
-                self.le_recdata.append('[SPU Error]: Port Not Found')
+                self.le_alertData.append('[SPU Error]: Port Not Found')
             else:
-                self.le_recdata.append('[SPU Error]: ' + str(e))
+                self.le_alertData.append('[SPU Error]: ' + str(e))
             print('err:', e)
 
 
-    def read_data_size(self):
+    # def read_data_size(self):
 
-        ct = datetime.datetime.now()
-        ct_str = ct.strftime("%Y-%m-%d %H:%M:%S")
+    #     ct = datetime.datetime.now()
+    #     ct_str = ct.strftime("%Y-%m-%d %H:%M:%S")
 
-        try:
-            # self.size=10
-            self.read_data=self.ser.read_all()
-            # print(self.read_data)
-            self.read_data_str=self.read_data.hex()
-            # re.findall(r'.{3}',self.read_data_str)
-            self.read_data_str_fg=self.str_separate(self.read_data_str)
-            # print(self.read_data_str)
-            self.le_recdata.append('['+ct_str+'] ' + self.read_data_str_fg)
+    #     try:
+    #         # self.size=10
+    #         self.read_data=self.ser.read_all()
+    #         # print(self.read_data)
+    #         self.read_data_str=self.read_data.hex()
+    #         # re.findall(r'.{3}',self.read_data_str)
+    #         self.read_data_str_fg=self.str_separate(self.read_data_str)
+    #         # print(self.read_data_str)
+    #         self.le_posData.append('['+ct_str+'] ' + self.read_data_str_fg)
 
-        except Exception as e:
-            print(type(e))
-        # return self.read_data
+    #     except Exception as e:
+    #         print(type(e))
+    #     # return self.read_data
 
 
     def read_data_line(self):
@@ -189,7 +205,10 @@ class Serialwindow(QWidget):
         try:
 
             self.read_data=self.ser.readline().decode('utf-8').replace('\n','')
-            self.le_recdata.append('['+ct_str+'] ' + self.read_data)
+            if 'pos' in self.read_data:
+                self.le_posData.append('['+ct_str+'] ' + self.read_data)
+            else:
+                self.le_otherData.append('['+ct_str+'] ' + self.read_data)
 
             lock.acquire()
             if 'goal pos' in self.read_data:
@@ -205,11 +224,17 @@ class Serialwindow(QWidget):
         except Exception as e:
             print(type(e))
             if type(e) is AttributeError:
-                self.le_recdata.append('[SPU Error]: Port Not Found')
+                self.le_alertData.append('[SPU Error]: Port Not Found')
             elif type(e) is serial.serialutil.PortNotOpenError:
-                self.le_recdata.append('[SPU Error]: Port Not Opened')
+                self.le_alertData.append('[SPU Error]: Port Not Opened')
             print('err:', e)
 
 
-    def clear_recdata(self):
-        self.le_recdata.clear()
+    def clear_posData(self):
+        self.le_posData.clear()
+
+    def clear_otherData(self):
+        self.le_otherData.clear()
+    
+    def clear_alertData(self):
+        self.le_alertData.clear()
